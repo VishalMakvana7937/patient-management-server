@@ -47,9 +47,9 @@ const DoctorSchema = new mongoose.Schema({
     signaturePublicId: { type: String, required: false },
     specialtyType: { type: String, required: false },
     workOn: { type: String, required: false },
-    workingTime: { type: String, required: false }, // e.g., "09:00 AM - 05:00 PM"
-    checkUpTime: { type: String, required: false }, // Duration in minutes, e.g., 30
-    breakTime: { type: String, required: false }, // e.g., "12:00 PM - 01:00 PM, 03:00 PM - 03:30 PM"
+    workingTime: { type: String, required: false }, 
+    checkUpTime: { type: String, required: false },
+    breakTime: { type: String, required: false }, 
     experience: { type: String, required: false },
     phoneNumber: { type: String, required: false },
     age: { type: String, required: false },

@@ -8,9 +8,13 @@ const uploadMiddleware = require('../middlewares/uploadMiddleware');
 
 router.post('/register/doctor', uploadMiddleware(), registerDoctor);
 router.post('/login', loginDoctor);
-router.get('/', getDoctors);
+
+router.get('/data', getDoctors);
+
 router.put('/:id', isAdmin, uploadMiddleware(), updateDoctor);
-router.delete('/:id', isAdmin, deleteDoctor);
+
+router.delete('/doctors/delete/:id', isAdmin, deleteDoctor);
+
 router.post('/change-password', changePassword);
 router.post('/forgot-password', forgotPassword);
 router.post('/verify-otp', verifyOtp);

@@ -34,8 +34,10 @@ exports.registerDoctor = async (req, res) => {
             checkUpTime,
             workOn,
             specialtyType,
-            // workingTime,
-            // breakTime,
+
+            workingTime,
+            breakTime,
+
             age,
             phoneNumber,
             email,
@@ -56,8 +58,6 @@ exports.registerDoctor = async (req, res) => {
         } = req.body;
 
 
-        // const formattedWorkingTime = formatWorkingTime(workingTime);
-        // const formattedBreakTime = formatBreakTime(breakTime);
 
         if (!req.files || !req.files.signatureImage || !req.files.profileImage) {
             return res.status(400).json({ message: "Both signature and profile images are required." });
@@ -74,10 +74,13 @@ exports.registerDoctor = async (req, res) => {
             folder: 'doctors',
         });
 
+
+
+
         const profileImageResult = await cloudinary.uploader.upload(profileImageFile.tempFilePath, {
             folder: 'doctors',
         });
-        
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newDoctor = new Doctor({
@@ -88,8 +91,8 @@ exports.registerDoctor = async (req, res) => {
             checkUpTime,
             workOn,
             specialtyType,
-            // workingTime,
-            // breakTime,
+            workingTime,
+            breakTime,
             age,
             phoneNumber,
             email,
@@ -150,9 +153,10 @@ exports.loginDoctor = async (req, res) => {
 // Get Doctors
 exports.getDoctors = async (req, res) => {
     try {
-        const doctors = await Doctor.find();
+        const doctors = await Doctor.find(); // Fetch all doctors from the database
         res.status(200).json(doctors);
     } catch (error) {
+        console.error("Error fetching doctors:", error);
         res.status(500).json({ message: "Error fetching doctors.", error });
     }
 };
@@ -210,20 +214,16 @@ exports.deleteDoctor = async (req, res) => {
             return res.status(404).json({ message: "Doctor not found." });
         }
 
-        if (doctor.profilePublicId) {
-            await cloudinary.uploader.destroy(doctor.profilePublicId);
-        }
-        if (doctor.signaturePublicId) {
-            await cloudinary.uploader.destroy(doctor.signaturePublicId);
-        }
-
+        // Delete doctor from database
         await Doctor.findByIdAndDelete(id);
+
         res.status(200).json({ message: "Doctor deleted successfully." });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error deleting doctor.", error });
     }
 };
+
 
 
 // Change Password
